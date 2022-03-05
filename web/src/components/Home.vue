@@ -3,22 +3,22 @@ import PowerButton from './PowerButton.vue'
 import TwitchPlayer from './TwitchPlayer.vue'
 import Hero from './Hero.vue'
 import Chat from './Chat.vue'
+import ButtonPanel from './ButtonPanel.vue'
 </script>
 
 
 <template>
 
   <!-- Grid div -->
-  <div class="grid grid-flow-col-dense row-span-2 justify-center items-start">
-
-    <div>
-      <Hero />
-    </div>
-    <div>
-      <div class="mb-6">
+  <div class="grid grid-flow-row-dense row-span-2 justify-center items-start">
+    <div class="flex flex-row justify-center items-center">
+      <ButtonPanel />
+      <div class="mb-8">
         <TwitchPlayer />
       </div>
-        <Chat />
-      </div>
+    </div>
+    <div class="mb-8">
+      <Hero />
+    </div>
   </div>
 </template>
