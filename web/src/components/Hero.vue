@@ -1,23 +1,16 @@
 <script setup>
+import Schedule from './Schedule.vue'
 </script>
 
 <template>    
-  <div class="flex justify-between items-start bg-pink-300 mx-16 mt-12 rounded-lg border-lg shadow-xl text-purple-900 text-center">
-    <img src="../assets/kassandra.png" class="scale-75" />
-    <div class="py-12 px-6 bg-pink-200 rounded-xl mt-24 mr-24">
-      <span class="italic text-xl">Hey there!</span>
-      <br />
-      <br />
-        <p class="text-lg">
-        I'm <strong>Kassandra</strong>. 
-        <br />
-        Nice to meet you! I'm the official Twitch channel bot at
-        <a href="https://twitch.tv/kcckirby" class="text-pink-900 hover:text-blue-900">Gaming With Kirby.</a>
-        <br />
-        If you'd like, you can check out my
-        <button class="px-2 rounded-xl bg-pink-400">commands</button>,
-        and be sure to tune in to the next stream!
-        </p>
+    <div class="mr-8 bg-pink-300 border-2 shadow-xl border-x-pink-600 border-y-pink-800 rounded-xl p-12 flex flex-row">
+      <img src="../assets/kassandra.png" class="max-w-xs"/>
+      <div class="ml-10 text-center">
+        <p class="py-4">Hi! <br />I'm <strong>Kassandra!</strong></p>
+        <p>I'm the official bot for <a class="text-blue-700 hover:text-pink-900" href="https://twitch.tv/KCCKirby">Gaming With Kirby</a>.</p>
+        <p class="pt-4">Here's what Kirby told me about the schedule...</p>
+        <p class="pb-4">All times are in EST!</p>
+      <Schedule />
       </div>
     </div>
 </template>
