@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { XIcon } from '@heroicons/vue/solid'
+import { auth } from '../firebase.js'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
 const props = defineProps({
   signInModal: Boolean
