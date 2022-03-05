@@ -4,7 +4,14 @@ import Home from './components/Home.vue'
 import SignIn from './components/SignIn.vue'
 import NavBar from './components/NavBar.vue'
 import Hero from './components/Hero.vue'
+import { auth } from './firebase'
+import { onAuthStateChanged } from 'firebase/auth'
 
+onAuthStateChanged(auth, (userCred) => {
+  if (userCred) {
+    console.log(userCred)
+  }
+})
 const signInModal = ref(false)
 const user = reactive({
   username: "",
