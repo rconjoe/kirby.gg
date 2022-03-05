@@ -19,9 +19,9 @@ function signIn() {
 <template>
 
   <!-- This provides the gray overlay effect when active. -->
-  <div v-if="signInModal" class="fixed inset-0 w-200 h-400 flex items-center justify-center bg-gray-900 opacity-75">
+  <div v-if="signInModal" class="fixed inset-0 w-200 h-400 flex items-center justify-center bg-gray-900">
     <!-- The actual content for signin. -->
-    <div class="relative p-6 bg-gray-200 ml-32 mr-20 my-4 rounded-lg border-lg text-black opacity-100">
+    <div class="relative p-6 bg-gray-300 ml-32 mr-20 my-4 rounded-lg border-lg text-black opacity-100">
 
       <!-- The form -->
       <div class="mb-4"><h1>Let's get you signed in!</h1></div>
