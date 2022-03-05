@@ -9,7 +9,11 @@
   },
   "dependencies": {
     "@heroicons/vue": "^1.0.5",
+    "@twurple/api": "^5.0.18",
+    "@twurple/auth": "^5.0.18",
     "@vueuse/core": "^7.7.0",
+    "axios": "^0.26.0",
+    "dayjs": "^1.10.8",
     "vue": "^3.2.25"
   },
   "devDependencies": {
