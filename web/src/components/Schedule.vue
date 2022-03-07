@@ -26,7 +26,7 @@ onMounted(async () => {
 
 <template>
   <div v-for="stream in schedule" :key="id" class="bg-pink-200 text-pink-900 p-3 my-4 justify-items-center items-center rounded-lg shadow-lg">
-    <p class="font-bold">{{ stream.title }}</p>
+    <p class="mx-2 font-bold">{{ stream.title }}</p>
     <p>{{ dayjs(stream.start_time).tz('America/New_York').format('ddd M/D h:mma') }} EST</p>
     </div>
 </template>
