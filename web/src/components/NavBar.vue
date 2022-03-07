@@ -6,7 +6,7 @@
 </script>
 
 <template>
-  <nav class="bg-pink-800 mx-6 my-8 rounded-lg shadow-xl text-lg text-pink-100">
+  <nav class="bg-pink-800 m-6 rounded-lg shadow-xl text-lg text-pink-100">
     <!-- <span class="py-12">Kassandra.js</span> -->
     <div class="grid grid-cols-3 grid-rows-2 md:grid-rows-1 md:grid-cols-6 place-items-center pt-4 pb-2">
       <div class="grid grid-rows-3 place-items-center">
