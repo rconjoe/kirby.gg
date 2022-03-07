@@ -42,7 +42,7 @@ function toggleModal() {
   <SignIn :signInModal="signInModal" @toggleModal="toggleModal" />
 
   <!-- <Hero v-if="user.email === ''" /> -->
-  <Home />
+  <Home v-if="currentWindow === 0"/>
 
 </template>
 
