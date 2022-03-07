@@ -1,6 +1,8 @@
 import ComfyJS from 'comfy.js'
 import { firestore } from './firebase.js'
 import { collection, doc, onSnapshot } from 'firebase/firestore'
+import dotenv from 'dotenv'
+dotenv.config()
 
 
 // Define and populate configuration
@@ -30,14 +32,28 @@ onSnapshot(collection(firestore, 'commands'), (snapshot) => {
   console.log(JSON.stringify(commands))
 })
 
-// Define command handler
+
+// comfy.js lets us define command handlers which are passed a predefined set of parameters:
 ComfyJS.onCommand = (user, command, message, flags, extra) => {
 
-  // Power switch
+  // Global power switch
   if (cfg.power === false) return
   // Dev mode
   if (cfg.devsOnly && !cfg.devs.some((dev) => dev === user)) return
 
+  // Find the command in the list of commands that comes from firestore
+  const cmd = commands.find(({ name }) => name === command)
+
+  // Array.find() returns undefined if it can't find our command in the list, so handle that
+  if (cmd === undefined) return
+
+  // Each command has a power switch ("on" field)
+  if (cmd.on === false) return
+
+  // Say the response, replacing vars
+  ComfyJS.Say(cmd.response.replace('$user', user))
+
 }
 
-ComfyJS.Init('rcon_joe')
+
+ComfyJS.Init('rcon_joe', process.env.OAUTH)
