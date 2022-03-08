@@ -8,7 +8,6 @@ import ButtonPanel from './ButtonPanel.vue'
 
 
 <template>
-
   <div class="mb-8 mx-12">
     <Hero />
   </div>
