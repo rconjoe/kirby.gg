@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import Home from './components/Home.vue'
 import SignIn from './components/SignIn.vue'
 import NavBar from './components/NavBar.vue'
@@ -11,20 +11,20 @@ import ButtonPanel from './components/ButtonPanel.vue'
 import Commands from './components/Commands.vue'
 import { auth } from './firebase'
 import { onAuthStateChanged } from 'firebase/auth'
+import { useAuthState } from './store/useAuthState.js'
+
+const authState = useAuthState()
 
 onAuthStateChanged(auth, (userCred) => {
   if (userCred) {
-    console.log(userCred)
+    authState.setUser(userCred)
+  }
+  else {
+    authState.$reset()
   }
 })
+
 const signInModal = ref(false)
-const user = reactive({
-  username: "",
-  twitch_username: "",
-  uid: "",
-  email: "",
-  flags: []
-})
 
 const currentWindow = ref(0)
 
@@ -42,7 +42,7 @@ function toggleModal() {
 <template>
 
   <!-- Header Bar -->
-  <NavBar :uid="user.uid" @setWindow="setWindow" @modal="toggleModal" />
+  <NavBar :uid="authState.user.uid" @setWindow="setWindow" @modal="toggleModal" />
 
   <SignIn :signInModal="signInModal" @toggleModal="toggleModal" />
 
