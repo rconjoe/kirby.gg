@@ -7,8 +7,8 @@ import Hero from './components/Hero.vue'
 import PowerButton from './components/PowerButton.vue'
 import TwitchPlayer from './components/TwitchPlayer.vue'
 import Chat from './components/Chat.vue'
-import ButtonPanel from './components/ButtonPanel.vue'
-import Commands from './components/Commands.vue'
+import Commands from './components/Commands.vue' 
+import Unauthorized from './components/Unauthorized.vue'
 import { auth } from './firebase'
 import { onAuthStateChanged } from 'firebase/auth'
 import { useAuthState } from './store/useAuthState.js'
@@ -50,11 +50,13 @@ function toggleModal() {
     <div class="flex flex-col justify-center items-center">
       <!-- <div class="mb-8"> -->
         <TwitchPlayer />
-      <ButtonPanel />
       <!-- </div> -->
     </div>
     <Home v-if="currentWindow === 0"/>
-    <Commands v-if="currentWindow === 1"/>
+    <Commands v-if="currentWindow === 1 && authState.uid !== ''"/>
+
+    <Unauthorized v-if="[1,2,3,4].some((window) => currentWindow === window) && authState.uid === ''" />
+
   </div>
 
 </template>
