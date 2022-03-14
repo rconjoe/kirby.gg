@@ -8,11 +8,14 @@ const props = defineProps({
   signInModal: Boolean
 })
 
+const emit = defineEmits(['toggleModal'])
+
 const email = ref("")
 const password = ref("")
 
 async function signIn() {
-  return await signInWithEmailAndPassword(auth, email.value, password.value)
+  await signInWithEmailAndPassword(auth, email.value, password.value)
+  return emit('toggleModal')
 }
 
 </script>
