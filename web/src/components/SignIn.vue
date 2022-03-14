@@ -11,8 +11,8 @@ const props = defineProps({
 const email = ref("")
 const password = ref("")
 
-function signIn() {
-  console.log(email.value, password.value)
+async function signIn() {
+  return await signInWithEmailAndPassword(auth, email.value, password.value)
 }
 
 </script>
