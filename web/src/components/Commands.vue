@@ -4,6 +4,7 @@ import NewCommand from './NewCommand.vue'
 import { onMounted, ref } from 'vue'
 import { firestore } from '../firebase.js'
 import { collection, onSnapshot } from 'firebase/firestore'
+import ButtonPanel from './ButtonPanel.vue'
 
 const commands = ref([])
 
@@ -18,6 +19,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <ButtonPanel />
   <div class="flex flex-col bg-pink-300 border-2 shadow-xl border-x-pink-600 border-y-pink-800 rounded-xl p-6 mb-8 mx-8">
     <div v-for="command in commands" class="flex flex-row justify-center w-full">
       <CommandManager :command="command" />
