@@ -26,39 +26,40 @@
       </div>
       <div class="grid grid-rows-3 text-center">
         <div class="row-span-2">
-          <img src="../assets/k2.jpg" @click="$emit('setWindow', 1)" class="h-16 w-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-125 hover:duration-300" />
+          <img v-if="uid !== ''" src="../assets/k2.jpg" @click="$emit('setWindow', 1)" class="h-16 w-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-125 hover:duration-300" />
         </div>
         <div class="row-span-1">
-          <a class="hover:text-blue-300" @click="$emit('setWindow', 1)">Commands</a>
+          <a v-if="uid !== ''" class="hover:text-blue-300" @click="$emit('setWindow', 1)">Commands</a>
         </div>
       </div>
       <div class="grid grid-rows-3 text-center">
         <div class="row-span-2">
-          <img src="../assets/k3.jpg" @click="$emit('setWindow', 2)" class="h-16 w-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-125 hover:duration-300" />
+          <img v-if="uid !== ''" src="../assets/k3.jpg" @click="$emit('setWindow', 2)" class="h-16 w-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-125 hover:duration-300" />
         </div>
         <div class="row-span-1">
-          <a class="hover:text-blue-300" @click="$emit('setWindow', 2)">Mod</a>
+          <a v-if="uid !== ''" class="hover:text-blue-300" @click="$emit('setWindow', 2)">Mod</a>
         </div>
       </div>
       <div class="grid grid-rows-3 text-center">
         <div class="row-span-2">
-          <img src="../assets/k7.jpg" @click="$emit('setWindow', 3)" class="h-16 w-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-125 hover:duration-300" />
+          <img v-if="uid !== ''" src="../assets/k7.jpg" @click="$emit('setWindow', 3)" class="h-16 w-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-125 hover:duration-300" />
         </div>
         <div class="row-span-1">
-          <a class="hover:text-blue-300" @click="$emit('setWindow', 3)">???</a>
+          <a v-if="uid !== ''" class="hover:text-blue-300" @click="$emit('setWindow', 3)">???</a>
         </div>
       </div>
       <div class="grid grid-rows-3 text-center">
         <div class="row-span-2">
-          <img src="../assets/k8.jpg" @click="$emit('setWindow', 3)" class="h-16 w-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-125 hover:duration-300" />
+          <img v-if="uid !== ''" src="../assets/k8.jpg" @click="$emit('setWindow', 3)" class="h-16 w-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-125 hover:duration-300" />
         </div>
         <div class="row-span-1">
-          <a class="hover:text-blue-300" @click="$emit('setWindow', 3)">???</a>
+          <a v-if="uid !== ''" class="hover:text-blue-300" @click="$emit('setWindow', 3)">???</a>
         </div>
       </div>
       <div class="grid grid-rows-3 text-center">
         <div class="row-span-2">
-          <img src="../assets/k5.jpg" @click="$emit('modal')" class="h-16 w-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-125 hover:duration-300" />
+          <img v-if="uid === ''" src="../assets/k5.jpg" @click="$emit('modal')" class="h-16 w-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-125 hover:duration-300" />
+          <img v-else src="../assets/k5.jpg" @click="logOut" class="h-16 w-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-125 hover:duration-300" />
         </div>
         <div class="row-span-1">
           <a v-if="uid === ''" @click="$emit('modal')" class="hover:text-blue-300">Sign In</a>
