@@ -1,7 +1,14 @@
 <script setup>
+  import { auth } from '../firebase.js'
+  import { signOut } from 'firebase/auth'
+
   defineProps({
     uid: String
   })
+
+  function logOut() {
+    signOut(auth)
+  }
 
 </script>
 
@@ -55,7 +62,7 @@
         </div>
         <div class="row-span-1">
           <a v-if="uid === ''" @click="$emit('modal')" class="hover:text-blue-300">Sign In</a>
-          <a v-else class="p-1 hover:text-blue-300" @click="$emit('modal')">Sign Out</a>
+          <a v-else class="p-1 hover:text-blue-300" @click="logOut">Sign Out</a>
         </div>
       </div>
     </div>
