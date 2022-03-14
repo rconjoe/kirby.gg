@@ -11,6 +11,5 @@ import Schedule from './Schedule.vue'
         <p class="pt-4 pb-2 text-lg xl:text-xl">Here's what Kirby told me about the schedule...</p>
       <Schedule />
       </div>
-      <!-- <img src="../assets/kirbyfishing.jpg" class="max-w-xs xl:max-w-sm"/> -->
     </div>
 </template>
