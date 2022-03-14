@@ -15,6 +15,7 @@
     "axios": "^0.26.0",
     "dayjs": "^1.10.8",
     "firebase": "^9.6.8",
+    "pinia": "^2.0.12",
     "vue": "^3.2.25"
   },
   "devDependencies": {
