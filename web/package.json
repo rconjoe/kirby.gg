@@ -11,7 +11,7 @@
     "@heroicons/vue": "^1.0.5",
     "@twurple/api": "^5.0.18",
     "@twurple/auth": "^5.0.18",
-    "@vueuse/core": "^7.7.0",
+    "@vueuse/core": "^7.7.1",
     "axios": "^0.26.0",
     "dayjs": "^1.10.8",
     "firebase": "^9.6.8",
