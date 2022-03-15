@@ -76,7 +76,9 @@ async function toggleFollow() {
 
 <template>
   <div class="my-2 bg-pink-200 rounded-lg p-2 flex flex-row justify-evenly items-center text-center w-full">
-    <h2 class="text-2xl pt-2">!{{ props.command.name }}</h2>
+    <div class="bg-blue-200 rounded-2xl px-4 py-2">
+    <h2 class="text-xl">!{{ props.command.name }}</h2>
+      </div>
     <input type="text" v-model="responseEdit" class="basis-3/5 bg-gray-200 border-2 p-2 rounded-lg text-lg xl:row-span-2" />
     <div class="flex flex-col align-center">
       <input id="onoff" v-model="on" @click="toggleCommandPower" class="ml-3 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
@@ -91,7 +93,7 @@ async function toggleFollow() {
       <label for="subs" class="text-sm">Subs</label>
     </div>
     <div class="flex flex-col align-center justify-center">
-      <input id="follow" v-model="toggleFollow" @click="toggleFollow" class="ml-4 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
+      <input id="follow" v-model="toggleFollow" @click="toggleFollow" class="ml-3 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
       <label for="follow" class="text-sm">Followers</label>
     </div>
     <button :class="[ buttonClass, loadingClass ]" @click="updateCommand" >Save</button>
