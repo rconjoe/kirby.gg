@@ -8,19 +8,27 @@ const props = defineProps({
   command: {
     name: String,
     response: String,
-    on: Boolean
+    on: Boolean,
+    devMode: Boolean,
+    subs: Boolean,
+    followers: Boolean
   }
 })
 
 const responseEdit = ref(props.command.response)
+const devMode = ref(props.command.devMode)
+const on = ref(props.command.on)
+const subs = ref(props.command.subs)
+const followers = ref(props.command.followers)
 const loading = ref(false)
 const trashLoading = ref(false)
 
 onMounted(() => {
   responseEdit.value = props.command.response
+
 })
-const buttonClass = "col-span-1 py-2 px-4 rounded-lg text-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:duration-300 hover:shadow-xl"
-const trashClass = "max-h-10 max-w-10 col-span-1 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:duration-300"
+const buttonClass = "py-2 px-4 rounded-lg text-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:duration-300 hover:shadow-xl"
+const trashClass = "max-h-8 max-w-8 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:duration-300"
 const trashLoadingClass = computed(() => trashLoading.value ? "animate-bounce" : "")
 const loadingClass = computed (() => loading.value ? "disabled bg-pink-200 animate-bounce" : "bg-pink-800" )
 
@@ -47,17 +55,46 @@ async function toggleCommandPower() {
   })
 }
 
+async function toggleDevMode() {
+  await updateDoc(doc(firestore, 'commands', props.command.name), {
+    devMode: !props.command.devMode
+  })
+}
+
+async function toggleSubs() {
+  await updateDoc(doc(firestore, 'commands', props.command.name), {
+    subs: !props.command.subs
+  })
+}
+
+async function toggleFollow() {
+  await updateDoc(doc(firestore, 'commands', props.command.name), {
+    followers: !props.command.followers
+  })
+}
 </script>
 
 <template>
-  <div class="grid grid-rows-1 grid-cols-9 gap-2 my-2 bg-pink-200 rounded-lg p-2 flex flex-row justify-items-stretch items-center text-center w-full">
-    <h2 class="text-2xl col-span-1 pt-2">!{{ props.command.name }}</h2>
-    <input type="text" v-model="responseEdit" class="bg-gray-200 col-span-5 border-2 w-full p-2 rounded-lg text-lg xl:row-span-2" />
-    <button :class="[ buttonClass, loadingClass ]" @click="updateCommand" >Save</button>
-    <TrashIcon :class="[ trashClass, trashLoadingClass ]" @click="deleteCommand" /><div class="flex justify-center">
-    <div class="form-check form-switch col-span-1">
-      <input class="form-check-input appearance-none w-9 -ml-10 rounded-full float-left h-5 align-top bg-white bg-no-repeat bg-contain bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
+  <div class="my-2 bg-pink-200 rounded-lg p-2 flex flex-row justify-evenly items-center text-center w-full">
+    <h2 class="text-2xl pt-2">!{{ props.command.name }}</h2>
+    <input type="text" v-model="responseEdit" class="basis-3/5 bg-gray-200 border-2 p-2 rounded-lg text-lg xl:row-span-2" />
+    <div class="flex flex-col align-center">
+      <input id="onoff" v-model="on" @click="toggleCommandPower" class="ml-3 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
+      <label for="onoff" class="text-sm">On/Off</label>
     </div>
-</div>
+    <div class="flex flex-col align-center justify-center">
+      <input id="devMode" v-model="devMode" @click="toggleDevMode" class="form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
+      <label for="devMode" class="text-sm">Devs</label>
+    </div>
+    <div class="flex flex-col align-center justify-center">
+      <input id="subs" v-model="subs" @click="toggleSubs" class="ml-1 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
+      <label for="subs" class="text-sm">Subs</label>
+    </div>
+    <div class="flex flex-col align-center justify-center">
+      <input id="follow" v-model="toggleFollow" @click="toggleFollow" class="ml-4 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
+      <label for="follow" class="text-sm">Followers</label>
+    </div>
+    <button :class="[ buttonClass, loadingClass ]" @click="updateCommand" >Save</button>
+    <TrashIcon :class="[ trashClass, trashLoadingClass ]" @click="deleteCommand" />
   </div>
 </template>
