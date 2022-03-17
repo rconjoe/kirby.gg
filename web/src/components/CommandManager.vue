@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { firestore } from '../firebase.js'
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore'
 import { TrashIcon } from '@heroicons/vue/solid'
@@ -11,7 +11,8 @@ const props = defineProps({
     on: Boolean,
     devMode: Boolean,
     subs: Boolean,
-    followers: Boolean
+    followers: Boolean,
+    public: Boolean
   }
 })
 
@@ -20,15 +21,16 @@ const devMode = ref(props.command.devMode)
 const on = ref(props.command.on)
 const subs = ref(props.command.subs)
 const followers = ref(props.command.followers)
+const _public = ref(props.command.public)
 const loading = ref(false)
 const trashLoading = ref(false)
 
 onMounted(() => {
   responseEdit.value = props.command.response
-
 })
-const buttonClass = "py-2 px-4 rounded-lg text-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:duration-300 hover:shadow-xl"
-const trashClass = "max-h-8 max-w-8 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:duration-300"
+
+const buttonClass = "text-md py-2 px-3 rounded-lg text-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:duration-300 hover:shadow-xl"
+const trashClass = "max-h-7 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:duration-300"
 const trashLoadingClass = computed(() => trashLoading.value ? "animate-bounce" : "")
 const loadingClass = computed (() => loading.value ? "disabled bg-pink-200 animate-bounce" : "bg-pink-800" )
 
@@ -67,11 +69,23 @@ async function toggleSubs() {
   })
 }
 
+async function togglePublic() {
+  await updateDoc(doc(firestore, 'commands', props.command.name), {
+    public: !props.command.public
+  })
+}
+
 async function toggleFollow() {
   await updateDoc(doc(firestore, 'commands', props.command.name), {
     followers: !props.command.followers
   })
 }
+
+watch(_public, async (curr, old) => {
+  if (old === false && subs.value === false) {
+        await toggleSubs()
+      }
+    })
 </script>
 
 <template>
@@ -79,22 +93,26 @@ async function toggleFollow() {
     <div class="bg-blue-200 rounded-2xl px-4 py-2">
     <h2 class="text-xl">!{{ props.command.name }}</h2>
       </div>
-    <input type="text" v-model="responseEdit" class="basis-3/5 bg-gray-200 border-2 p-2 rounded-lg text-lg xl:row-span-2" />
+    <input type="text" v-model="responseEdit" class="basis-7/12 bg-gray-200 border-2 p-2 rounded-lg text-lg xl:row-span-2" />
     <div class="flex flex-col align-center">
       <input id="onoff" v-model="on" @click="toggleCommandPower" class="ml-3 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
       <label for="onoff" class="text-sm">On/Off</label>
     </div>
     <div class="flex flex-col align-center justify-center">
-      <input id="devMode" v-model="devMode" @click="toggleDevMode" class="form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
+      <input id="devMode" v-model="devMode" :disabled="!on" @click="toggleDevMode" class="form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
       <label for="devMode" class="text-sm">Devs</label>
     </div>
     <div class="flex flex-col align-center justify-center">
-      <input id="subs" v-model="subs" @click="toggleSubs" class="ml-1 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
+      <input id="subs" v-model="subs" :disabled="!on" @click="toggleSubs" class="ml-1 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
       <label for="subs" class="text-sm">Subs</label>
     </div>
+    <!-- <div class="flex flex-col align-center justify-center"> -->
+    <!--   <input disabled id="follow" v-model="followers" @click="toggleFollow" class="ml-3 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked> -->
+    <!--   <label for="follow" class="text-sm">Followers</label> -->
+    <!-- </div> -->
     <div class="flex flex-col align-center justify-center">
-      <input id="follow" v-model="toggleFollow" @click="toggleFollow" class="ml-3 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
-      <label for="follow" class="text-sm">Followers</label>
+      <input id="public" v-model="_public" :disabled="!on" @click="togglePublic" class="ml-1 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
+      <label for="public" class="text-sm">Public</label>
     </div>
     <button :class="[ buttonClass, loadingClass ]" @click="updateCommand" >Save</button>
     <TrashIcon :class="[ trashClass, trashLoadingClass ]" @click="deleteCommand" />
