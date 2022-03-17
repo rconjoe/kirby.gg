@@ -14,7 +14,8 @@ async function addCommand() {
     on: true,
     devMode: true,
     subs: false,
-    followers: false
+    followers: false,
+    public: false,
   })
   commandEdit.value = ""
   responseEdit.value = ""
