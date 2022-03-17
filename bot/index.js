@@ -9,12 +9,16 @@ dotenv.config()
 let cfg = {
   power: false,
   devsOnly: false,
+  subs: false,
+  followers: false,
+  public: false,
   devs: []
 }
 
 onSnapshot(doc(firestore, 'cfg', 'core'), (doc) => {
-  cfg.power = doc.data().power
-  cfg.devsOnly = doc.data().devsOnly
+  const data = doc.data()
+  cfg.power = data.power
+  cfg.devsOnly = data.devsOnly
   cfg.devs = []
   doc.data().devs.forEach(dev => cfg.devs.push(dev))
   console.log("cfg/core updated: " + JSON.stringify(cfg))
@@ -37,7 +41,7 @@ onSnapshot(collection(firestore, 'commands'), (snapshot) => {
 ComfyJS.onCommand = (user, command, message, flags, extra) => {
 
   // Global power switch
-  if (cfg.power === false) return
+  if (!cfg.power) return
   // Dev mode
   if (cfg.devsOnly && !cfg.devs.some((dev) => dev === user)) return
 
@@ -47,8 +51,14 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
   // Array.find() returns undefined if it can't find our command in the list, so handle that
   if (cmd === undefined) return
 
-  // Each command has a power switch ("on" field)
-  if (cmd.on === false) return
+  // Each command has power and permission toggles
+  if (!cmd.on) return
+  if (cmd.on && !cmd.devs && !cmd.subs && !cmd.public) return
+  if (cmd.devMode && !cfg.devs.some((dev) => dev === user)) return
+  if (cmd.subs && !flags.subscriber) return
+  // follower flag??????? wtf instafluff.
+  // if (!cmd.public && !cfg.devs.some((dev) => dev === user) && !flags.subscriber) return
+
 
   // Say the response, replacing vars
   ComfyJS.Say(cmd.response.replace('$user', user))
