@@ -9,9 +9,6 @@ dotenv.config()
 let cfg = {
   power: false,
   devsOnly: false,
-  subs: false,
-  followers: false,
-  public: false,
   devs: []
 }
 
