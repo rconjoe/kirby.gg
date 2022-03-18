@@ -50,12 +50,20 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
 
   // Each command has power and permission toggles
   if (!cmd.on) return
-  if (cmd.on && !cmd.devs && !cmd.subs && !cmd.public) return
-  if (cmd.devMode && !cfg.devs.some((dev) => dev === user)) return
-  if (cmd.subs && !flags.subscriber) return
-  // follower flag??????? wtf instafluff.
-  // if (!cmd.public && !cfg.devs.some((dev) => dev === user) && !flags.subscriber) return
 
+  // command is on but everything else is off
+  if (cmd.on && !cmd.subs && !cmd.devMode && !cmd.subs && !cmd.public) return
+
+  // devmode only and sender is not not dev
+  if (cmd.on && cmd.devMode && !cmd.subs && !cmd.public && !cfg.devs.some((dev) => dev === user)) return
+
+  // subs only and sender is not sub
+  if (cmd.on && !cmd.devMode && cmd.subs && !cmd.public && !flags.subscriber && !cmd.devMode) return
+
+  // devs and subs only but sender is neither
+  if (cmd.on && cmd.devMode && cmd.subs && !cmd.public && !flags.subscriber && !cfg.devs.some((dev) => dev === user)) return
+
+  // follower flag??????? wtf instafluff.
 
   // Say the response, replacing vars
   ComfyJS.Say(cmd.response.replace('$user', user))
