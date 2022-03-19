@@ -65,6 +65,11 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
 
   // follower flag??????? wtf instafluff.
 
+  if (cmd.functional === true) {
+    const ev = new Function('bot, user, command, message, flags, extra', cmd.code)
+    return (ev(ComfyJS, user, command, message, flags, extra))
+  }
+
   // Say the response, replacing vars
   ComfyJS.Say(cmd.response.replace('$user', user))
 
