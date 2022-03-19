@@ -5,6 +5,7 @@ import { onMounted, ref } from 'vue'
 import { firestore } from '../firebase.js'
 import { collection, onSnapshot } from 'firebase/firestore'
 import ButtonPanel from './ButtonPanel.vue'
+import Editor from './Editor.vue'
 
 const commands = ref([])
 
@@ -27,5 +28,6 @@ onMounted(async () => {
     <div class="flex flex-row flex-auto justify-center">
       <NewCommand />
     </div>
+      <Editor />
   </div>
 </template>
