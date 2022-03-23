@@ -11,6 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@codemirror/commands": "^0.19.8",
+    "@codemirror/state": "^0.19.9",
+    "@codemirror/text": "^0.19.6",
+    "@codemirror/view": "^0.19.47",
     "comfy.js": "^1.1.13",
     "dotenv": "^16.0.0",
     "firebase": "^9.6.7"
