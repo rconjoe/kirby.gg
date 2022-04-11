@@ -37,13 +37,16 @@ onSnapshot(collection(firestore, 'commands'), (snapshot) => {
 // comfy.js lets us define command handlers which are passed a predefined set of parameters:
 ComfyJS.onCommand = (user, command, message, flags, extra) => {
 
+  const sanitizedCommand = command.toLowerCase()
+  console.log(sanitizedCommand)
+
   // Global power switch
   if (!cfg.power) return
   // Dev mode
   if (cfg.devsOnly && !cfg.devs.some((dev) => dev === user)) return
 
   // Find the command in the list of commands that comes from firestore
-  const cmd = commands.find(({ name }) => name === command.toLowerCase())
+  const cmd = commands.find(({ name }) => name === sanitizedCommand)
 
   // Array.find() returns undefined if it can't find our command in the list, so handle that
   if (cmd === undefined) return
