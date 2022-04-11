@@ -31,6 +31,7 @@ const functionalEditor = ref(false)
 const codeEdit = ref(props.command.code)
 const loading = ref(false)
 const trashLoading = ref(false)
+const showDirections = ref(false)
 
 const buttonClass = "text-md py-2 px-3 rounded-lg text-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:duration-300 hover:shadow-xl"
 const trashClass = "max-h-7 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:duration-300"
@@ -151,5 +152,70 @@ watch(_public, async (curr, old) => {
       :options="{useWorker: true}"
       class="rounded-lg text-lg"
     />
+    <button v-if="props.command.functional && functionalEditor && !showDirections" class="rounded-full w-full bg-blue-300 mt-4 mb-2 px-4 py-2" @click="showDirections = !showDirections">Show Instructions</button>
+    <button v-if="showDirections" class="rounded-full w-full bg-blue-300 mt-4 mb-2 px-4 py-2" @click="showDirections = !showDirections">Hide Instructions</button>
+    <div v-if="showDirections" class="text-lg bg-gray-200 rounded-lg mt-4 mx-2 pt-6 pl-8 pb-6 text-gray-600">
+      <i>The JavaScript you write here will be injected into the body of a function that runs every time this command is invoked.
+      <br />
+        You MUST use semicolons for this code to work properly.
+      <br />
+      The following parameters are available:</i>
+      <br /> 
+      <br /> 
+      <strong>bot</strong>: This is Kassandra. Use the <span class="font-mono bg-gray-300 py-1 px-2">Say</span> method to send your response. Example:
+      <div class="border mt-2 bg-gray-500 text-white p-4 mr-24 font-mono mb-8">
+      bot.Say("uwu");
+      </div>
+      <strong>user</strong>: This is the username of the user who sent the message. You could use it like this:
+      <div class="border mt-2 bg-gray-500 text-white p-4 mr-24 font-mono mb-8">
+      bot.Say(`Hello ${user}! Welcome to the stream.`);
+      </div>
+      <strong>command</strong>: This is the command that was invoked. Example:
+      <br /> 
+      <div class="border mt-2 bg-gray-500 text-white p-4 mr-24 font-mono mb-8">
+      bot.Say(`${user} invoked the ${command} command! Wow!`);
+      </div>
+      <strong>message</strong>: This contains any message added after the command when sent, like <span class="font-mono bg-gray-300 py-1 px-2">!command message</span> Example:
+      <br /> 
+      <div class="border mt-2 bg-gray-500 text-white p-4 mr-24 font-mono mb-8">
+      // User on Twitch invokes "!mapcheck dust2"<br /><br />
+      if (message === "de_dust2") {<br />
+        <p class="indent-4">bot.Say('dust2 is NOT in the current map rotation!')</p>
+        }<br />
+        else if (message === "vertigo") {<br />
+        <p class="indent-4">bot.Say('vertigo IS in the current map rotation!')</p>
+        }<br />
+      </div>
+      <strong>flags</strong>: An object containing true/false flags with extra info about the user or command:
+      <br /> 
+      <div class="border mt-2 bg-gray-500 text-white p-4 mr-24 font-mono mb-8">
+        flags.broadcaster<br />
+        flags.mod<br />
+        flags.founder<br />
+        flags.subscriber<br />
+        flags.vip<br />
+        flags.highlighted<br />
+      </div>
+      <strong>extra</strong>: An object containing a bunch of extra info.
+      <br /> 
+      <div class="border bg-gray-500 text-white p-4 mr-24 font-mono">
+        extra.id (the message message)<br />
+        extra.channel<br />
+        extra.roomId<br />
+        extra.messageType<br />
+        extra.messageEmotes<br />
+        extra.isEmoteOnly<br />
+        extra.userId<br />
+        extra.username<br />
+        extra.displayName<br />
+        extra.userColor<br />
+        extra.userBadges<br />
+        extra.flags<br />
+        extra.timestamp<br />
+        extra.customRewardId (only works with custom channel rewards with required-text)
+      </div>
+      <br /> 
+      Check the existing commands for more examples.
+    </div>
   </div>
 </template>
