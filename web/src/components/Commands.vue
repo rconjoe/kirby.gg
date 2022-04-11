@@ -5,7 +5,6 @@ import { onMounted, ref } from 'vue'
 import { firestore } from '../firebase.js'
 import { collection, onSnapshot } from 'firebase/firestore'
 import ButtonPanel from './ButtonPanel.vue'
-import Editor from './Editor.vue'
 
 const commands = ref([])
 
