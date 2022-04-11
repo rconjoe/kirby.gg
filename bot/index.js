@@ -80,4 +80,4 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
 }
 
 
-ComfyJS.Init(process.env.USER, process.env.OAUTH)
+ComfyJS.Init('kcckirby', process.env.OAUTH)
