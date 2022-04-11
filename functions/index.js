@@ -1,4 +1,5 @@
 const functions = require("firebase-functions");
+const axios = require('axios')
 
 exports.getSchedule = functions.https.onCall(async (data, context) => {
   const schedule = []
@@ -9,7 +10,7 @@ exports.getSchedule = functions.https.onCall(async (data, context) => {
     }
   })
   for (let i = 0; i < 5; i++) {
-    schedule.value.push(sched.data.data.segments[i])
+    schedule.push(sched.data.data.segments[i])
   }
   return schedule;
 });
