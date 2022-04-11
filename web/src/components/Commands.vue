@@ -28,6 +28,5 @@ onMounted(async () => {
     <div class="flex flex-row flex-auto justify-center">
       <NewCommand />
     </div>
-      <Editor />
   </div>
 </template>
