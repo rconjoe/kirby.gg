@@ -4,6 +4,8 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 import { ref, onMounted } from 'vue'
+import { functions } from '../firebase.js'
+import { httpsCallable } from 'firebase/functions'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -11,15 +13,16 @@ dayjs.extend(timezone)
 const schedule = ref([])
 
 onMounted(async () => {
-  const resp = await axios.get('https://api.twitch.tv/helix/schedule?broadcaster_id=18846157', {
-    headers: {
-      'Authorization': `Bearer ${import.meta.env.VITE_TOKEN}`,
-      'Client-Id': `${import.meta.env.VITE_ID}`
-    }
-  })
-  for (let i = 0; i < 5; i++) {
-    schedule.value.push(resp.data.data.segments[i])
-  }
+  const getSchedule = httpsCallable(functions, 'getSchedule')
+  getSchedule()
+    .then((resp) => {
+      for (let i = 0; i < 5; i++) {
+        schedule.value.push(resp.data.data.segments[i])
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 })
 
 </script>
