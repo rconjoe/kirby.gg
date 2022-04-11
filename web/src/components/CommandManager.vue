@@ -3,6 +3,11 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { firestore } from '../firebase.js'
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore'
 import { TrashIcon } from '@heroicons/vue/solid'
+import { VAceEditor } from 'vue3-ace-editor'
+import 'ace-builds/src-noconflict/mode-javascript'
+import 'ace-builds/src-noconflict/theme-clouds'
+import workerJsonUrl from 'ace-builds/src-noconflict/worker-javascript?url'
+ace.config.setModuleUrl('ace/mode/javascript_worker', workerJsonUrl)
 
 const props = defineProps({
   command: {
@@ -11,8 +16,9 @@ const props = defineProps({
     on: Boolean,
     devMode: Boolean,
     subs: Boolean,
-    followers: Boolean,
-    public: Boolean
+    public: Boolean,
+    functional: Boolean,
+    code: String
   }
 })
 
@@ -20,25 +26,43 @@ const responseEdit = ref(props.command.response)
 const devMode = ref(props.command.devMode)
 const on = ref(props.command.on)
 const subs = ref(props.command.subs)
-const followers = ref(props.command.followers)
 const _public = ref(props.command.public)
+const functionalEditor = ref(false)
+const codeEdit = ref(props.command.code)
 const loading = ref(false)
 const trashLoading = ref(false)
-
-onMounted(() => {
-  responseEdit.value = props.command.response
-})
 
 const buttonClass = "text-md py-2 px-3 rounded-lg text-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:duration-300 hover:shadow-xl"
 const trashClass = "max-h-7 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:duration-300"
 const trashLoadingClass = computed(() => trashLoading.value ? "animate-bounce" : "")
 const loadingClass = computed (() => loading.value ? "disabled bg-pink-200 animate-bounce" : "bg-pink-800" )
 
-async function updateCommand() {
+function updateCommand() {
   loading.value = true
-  await updateDoc(doc(firestore, 'commands', props.command.name), {
-    response: responseEdit.value
-  }) 
+  if (functionalEditor.value === true) {
+    updateDoc(doc(firestore, 'commands', props.command.name), {
+      code: codeEdit.value,
+    })
+    .then(() => {
+        functionalEditor.value = false
+        alert('Command saved!')
+      })
+    .catch((err) => {
+        functionalEditor.value = false
+        alert('There was an error saving your command.')
+      })
+  }
+  else {
+    updateDoc(doc(firestore, 'commands', props.command.name), {
+      response: responseEdit.value
+    })     
+    .then(() => {
+        alert('Command saved!')
+      })
+    .catch((err) => {
+        alert('There was an error saving your command.')
+      })
+  }
   loading.value = false
 }
 
@@ -75,10 +99,11 @@ async function togglePublic() {
   })
 }
 
-async function toggleFollow() {
-  await updateDoc(doc(firestore, 'commands', props.command.name), {
-    followers: !props.command.followers
-  })
+function editFunctionalCommand() {
+  functionalEditor.value = !functionalEditor.value
+}
+
+function saveCodeEdit() {
 }
 
 watch(_public, async (curr, old) => {
@@ -89,11 +114,14 @@ watch(_public, async (curr, old) => {
 </script>
 
 <template>
+  <div class="flex flex-col w-full">
   <div class="my-2 bg-pink-200 rounded-lg p-2 flex flex-row justify-evenly items-center text-center w-full">
-    <div class="bg-blue-200 rounded-2xl px-4 py-2">
-    <h2 class="text-xl">!{{ props.command.name }}</h2>
+    <div class="bg-blue-200 shadow rounded-2xl px-4 py-2">
+    !{{ props.command.name }}
       </div>
-    <input type="text" v-model="responseEdit" class="basis-7/12 bg-gray-200 border-2 p-2 rounded-lg text-lg xl:row-span-2" />
+    <input v-if="!props.command.functional" type="text" v-model="responseEdit" class="basis-7/12 bg-gray-200 border-2 p-2 rounded-lg text-lg xl:row-span-2" />
+    <button v-if="props.command.functional && !functionalEditor" class="basis-7/12 rounded-lg shadow-lg px-4 py-2 bg-pink-300" @click="editFunctionalCommand">Functional command - click to edit</button>
+    <button v-if="props.command.functional && functionalEditor" class="basis-7/12 rounded-lg shadow-lg px-4 py-2 bg-pink-300" @click="editFunctionalCommand">Edit your command below. Click here to close without saving.</button>
     <div class="flex flex-col align-center">
       <input id="onoff" v-model="on" @click="toggleCommandPower" class="ml-3 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
       <label for="onoff" class="text-sm">On/Off</label>
@@ -106,15 +134,22 @@ watch(_public, async (curr, old) => {
       <input id="subs" v-model="subs" :disabled="!on" @click="toggleSubs" class="ml-1 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
       <label for="subs" class="text-sm">Subs</label>
     </div>
-    <!-- <div class="flex flex-col align-center justify-center"> -->
-    <!--   <input disabled id="follow" v-model="followers" @click="toggleFollow" class="ml-3 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked> -->
-    <!--   <label for="follow" class="text-sm">Followers</label> -->
-    <!-- </div> -->
     <div class="flex flex-col align-center justify-center">
       <input id="public" v-model="_public" :disabled="!on" @click="togglePublic" class="ml-1 form-check-input w-6 h-6 rounded-lg bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" checked>
       <label for="public" class="text-sm">Public</label>
     </div>
     <button :class="[ buttonClass, loadingClass ]" @click="updateCommand" >Save</button>
     <TrashIcon :class="[ trashClass, trashLoadingClass ]" @click="deleteCommand" />
+  </div>
+    <v-ace-editor
+      v-if="props.command.functional && functionalEditor"
+      v-model:value="codeEdit"
+      @init="editorInit"
+      lang="javascript"
+      theme="clouds"
+      style="height: 400px"
+      :options="{useWorker: true}"
+      class="rounded-lg text-lg"
+    />
   </div>
 </template>
