@@ -17,7 +17,7 @@ onMounted(async () => {
   getSchedule()
     .then((resp) => {
       for (let i = 0; i < 5; i++) {
-        schedule.value.push(resp.data.data.segments[i])
+        schedule.value.push(resp.data[i])
       }
     })
     .catch((error) => {
