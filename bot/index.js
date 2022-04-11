@@ -65,6 +65,10 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
 
   // follower flag??????? wtf instafluff.
 
+
+  // TODO: pass a db class to the command with simplified CRUD methods for dynamic modeling.
+  // e.g. db.model('modelName').write({...data})
+  // This would enable the bot admin to build commands that use database functionality from the panel code editor.
   if (cmd.functional === true) {
     const ev = new Function('bot, user, command, message, flags, extra', cmd.code)
     return (ev(ComfyJS, user, command, message, flags, extra))
