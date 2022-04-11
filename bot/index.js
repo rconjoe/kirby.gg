@@ -43,7 +43,7 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
   if (cfg.devsOnly && !cfg.devs.some((dev) => dev === user)) return
 
   // Find the command in the list of commands that comes from firestore
-  const cmd = commands.find(({ name }) => name === command)
+  const cmd = commands.find(({ name }) => name === command.toLowerCase())
 
   // Array.find() returns undefined if it can't find our command in the list, so handle that
   if (cmd === undefined) return
@@ -80,4 +80,4 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
 }
 
 
-ComfyJS.Init('rcon_joe', process.env.OAUTH)
+ComfyJS.Init(process.env.USER, process.env.OAUTH)
