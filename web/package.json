@@ -18,7 +18,9 @@
     "firebase": "^9.6.10",
     "pinia": "^2.0.13",
     "vue": "^3.2.31",
-    "vue3-ace-editor": "^2.2.2"
+    "vue3-ace-editor": "^2.2.2",
+    "xterm": "^4.18.0",
+    "xterm-addon-attach": "^0.6.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.1",
