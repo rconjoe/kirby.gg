@@ -1,5 +1,6 @@
 const functions = require("firebase-functions");
 const axios = require('axios')
+const ComfyJS = require('comfy.js')
 
 exports.getSchedule = functions.https.onCall(async (data, context) => {
   const schedule = []
@@ -14,3 +15,9 @@ exports.getSchedule = functions.https.onCall(async (data, context) => {
   }
   return schedule;
 });
+
+exports.sayAsBot = functions.https.onCall(async (data, context) => {
+  ComfyJS.Init('rcon_joe', process.env.OAUTH)
+  ComfyJS.Say(data.message)
+  return
+})
