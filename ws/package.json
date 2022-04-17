@@ -1,0 +1,15 @@
+{
+  "name": "kassandra-websocket",
+  "version": "1.0.0",
+  "description": "websocket server for frontend terminal control of bot server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-pty": "^0.10.1",
+    "ws": "^8.5.0"
+  }
+}
