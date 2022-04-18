@@ -9,10 +9,10 @@ function doTheThing() {
   loading.value = true
   setTimeout(() => {
     loading.value = false
-  }, 5000)
+  }, 3000)
 }
 </script>
 
 <template>
-  <button :class="[ loadingClass, buttonClass ]" @click="doTheThing">Greet</button>
+  <button :class="[ loadingClass, buttonClass ]" @click="doTheThing">*broke*</button>
 </template>
