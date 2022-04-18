@@ -36,51 +36,68 @@ onSnapshot(collection(firestore, 'commands'), (snapshot) => {
 
 // comfy.js lets us define command handlers which are passed a predefined set of parameters:
 ComfyJS.onCommand = (user, command, message, flags, extra) => {
-
-  const sanitizedCommand = command.toLowerCase()
-  console.log(sanitizedCommand)
+  const isDev = cfg.devs.some((dev) => dev === user)
 
   // Global power switch
   if (!cfg.power) return
-  // Dev mode
-  if (cfg.devsOnly && !cfg.devs.some((dev) => dev === user)) return
+  // Global dev mode
+  // if (cfg.devsOnly && !isDev) return
+
+  const data = {
+    ComfyJS,
+    user,
+    command,
+    message,
+    flags,
+    extra
+  }
 
   // Find the command in the list of commands that comes from firestore
-  const cmd = commands.find(({ name }) => name === sanitizedCommand)
+  const cmd = commands.find(({ name }) => name === command.toLowerCase())
 
   // Array.find() returns undefined if it can't find our command in the list, so handle that
   if (cmd === undefined) return
 
+  function runIfDev(data, cmd, isDev) {
+    if (cmd.devMode) {
+      // execute the command if you are a dev, otherwise check subs
+      return (isDev ? execute(data) : null)
+    }
+    return
+  }
+
+  function runIfSub(data, cmd) {
+    if (cmd.subs) {
+      return (flags.subscriber ? execute(data) : null)
+    }
+    return
+  }
+
   // Each command has power and permission toggles
   if (!cmd.on) return
-
-  // command is on but everything else is off
-  if (cmd.on && !cmd.subs && !cmd.devMode && !cmd.subs && !cmd.public) return
-
-  // devmode only and sender is not not dev
-  if (cmd.on && cmd.devMode && !cmd.subs && !cmd.public && !cfg.devs.some((dev) => dev === user)) return
-
-  // subs only and sender is not sub
-  if (cmd.on && !cmd.devMode && cmd.subs && !cmd.public && !flags.subscriber && !cmd.devMode) return
-
-  // devs and subs only but sender is neither
-  if (cmd.on && cmd.devMode && cmd.subs && !cmd.public && !flags.subscriber && !cfg.devs.some((dev) => dev === user)) return
-
-  // follower flag??????? wtf instafluff.
-
 
   // TODO: pass a db class to the command with simplified CRUD methods for dynamic modeling.
   // e.g. db.model('modelName').write({...data})
   // This would enable the bot admin to build commands that use database functionality from the panel code editor.
-  if (cmd.functional === true) {
-    const ev = new Function('bot, user, command, message, flags, extra', cmd.code)
-    return (ev(ComfyJS, user, command, message, flags, extra))
+  function execute({ ComfyJS, user, command, message, flags, extra }) {
+    if (cmd.functional === true) {
+      const ev = new Function('bot, user, command, message, flags, extra', cmd.code)
+      return (ev(ComfyJS, user, command, message, flags, extra))
+    }
+
+    // Say the response, replacing vars
+    ComfyJS.Say(cmd.response.replace('$user', user))
   }
 
-  // Say the response, replacing vars
-  ComfyJS.Say(cmd.response.replace('$user', user))
+  // if the command is not public
+  if (!cmd.public) {
+    runIfDev(data, cmd, isDev)
+    runIfSub(data, cmd)
+  } else {
+    execute(data)
+  }
+
 
 }
-
 
 ComfyJS.Init('kcckirby', process.env.OAUTH)
