@@ -1,22 +1,30 @@
 {
   "name": "bot",
+  "jest": {
+    "verbose": true,
+    "setupFilesAfterEnv": [
+      "jest-extended/all"
+    ]
+  },
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "NODE_ENV=development nodemon index.js",
+    "start": "NODE_ENV=production nodemon index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@codemirror/commands": "^0.19.8",
-    "@codemirror/state": "^0.19.9",
-    "@codemirror/text": "^0.19.6",
-    "@codemirror/view": "^0.19.48",
     "comfy.js": "^1.1.13",
     "dotenv": "^16.0.0",
     "firebase": "^9.6.10"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1",
+    "jest-extended": "^2.0.0"
   }
 }
