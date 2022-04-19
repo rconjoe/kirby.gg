@@ -7,9 +7,8 @@ import { AttachAddon } from 'xterm-addon-attach';
 const xterm = ref(null)
 
 onMounted(() => {
-  const wss = process.env.NODE_ENV === 'production' ? 'ws://bot.kirby.gg:3001/websocket' : 'ws://localhost:3001/websocket'
   const terminal = new Terminal();
-  const socket = new WebSocket(wss)
+  const socket = new WebSocket('ws://bot.kirby.gg:3001/websocket')
   const attachAddon = new AttachAddon(socket)
   terminal.loadAddon(attachAddon)
   terminal.open(xterm.value, true)
@@ -21,5 +20,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="xterm" />
+  <div class="mt-4 shadow-lg">
+    <div ref="xterm" />
+  </div>
 </template>
