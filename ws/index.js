@@ -1,6 +1,7 @@
 const { WebSocketServer } = require('ws')
 const wss = new WebSocketServer({ port: 3001 })
 const pty = require('node-pty')
+const path = require('path')
 
 wss.on('connection', function connection(ws) {
   console.log('connected')
@@ -8,7 +9,7 @@ wss.on('connection', function connection(ws) {
     name: 'xterm-color',
     cols: 80,
     rows: 30,
-    cwd: process.env.HOME,
+    cwd: path.join(process.env.HOME, 'kirby.gg', 'bot'),
     env: process.env
   })
 
