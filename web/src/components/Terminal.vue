@@ -6,18 +6,15 @@ import { AttachAddon } from 'xterm-addon-attach';
 
 const xterm = ref(null)
 
-function bindTerminal(term, socket) {
-  term.socket = socket
-}
-
 onMounted(() => {
+  const wss = process.env.NODE_ENV === 'production' ? 'ws://bot.kirby.gg:3001/websocket' : 'ws://localhost:3001/websocket'
   const terminal = new Terminal();
-  const socket = new WebSocket('ws://localhost:8080/websocket')
-  const attachAddOn = new AttachAddon(socket)
+  const socket = new WebSocket(wss)
+  const attachAddon = new AttachAddon(socket)
+  terminal.loadAddon(attachAddon)
   terminal.open(xterm.value, true)
-  socket.onmessage = (message) => terminal.write(message.data)
-  terminal.onData(data => {
-    socket.send(data)
+  terminal.onData(value => {
+    console.log(value)
   })
 })
 
