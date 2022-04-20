@@ -1,5 +1,11 @@
-const { WebSocketServer } = require('ws')
-const wss = new WebSocketServer({ port: 3001 })
+const https = require('https')
+const fs = require('fs')
+const server = https.createServer({
+  cert: fs.readFileSync("./fixtures/certificate.pem"),
+  key: fs.readFileSync("./fixtures/key.pem")
+})
+const { WebSocketServer, WebSocket } = require('ws')
+const wss = new WebSocketServer({ server })
 const pty = require('node-pty')
 const path = require('path')
 
@@ -21,4 +27,14 @@ wss.on('connection', function connection(ws) {
     ws.send(data)
   })
 
+})
+
+server.listen(function listening() {
+  const ws = new WebSocket(`wss://localhost:${server.address().port}`, {
+    rejectUnauthorized: false
+  });
+
+  ws.on('open', function open() {
+    ws.send('All glory to WebSockets!');
+  });
 })
