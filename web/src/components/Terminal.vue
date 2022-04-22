@@ -8,19 +8,22 @@ const xterm = ref(null)
 
 onMounted(() => {
   const terminal = new Terminal();
-  const socket = new WebSocket('ws://bot.kirby.gg:3001/websocket')
+  const socket = new WebSocket('wss://ws.kirby.gg:3001')
   const attachAddon = new AttachAddon(socket)
   terminal.loadAddon(attachAddon)
   terminal.open(xterm.value, true)
-  terminal.onData(value => {
-    console.log(value)
-  })
 })
 
 </script>
 
 <template>
-  <div class="mt-4 shadow-lg">
+  <div class="mt-2 shadow-lg rounded-lg bg-pink-200 text-center">
+      <p class="mt-4"> This is a fully functional bash terminal connected to your bot server.
+      <br />
+      Start Kassandra with <code class="bg-slate-300 px-2 py-1">npm run start</code>! 
+    </p>
+    <div class="mt-4 mb-4">
+    </div>
     <div ref="xterm" />
   </div>
 </template>
